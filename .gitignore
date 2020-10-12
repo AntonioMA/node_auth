@@ -1,0 +1,37 @@
+# Dependency directories
+node_modules
+bower_components
+package-lock.json
+
+# test libraries that should be fetched by bower
+test/lib
+otrtc_*.pid
+resultsRest.txt
+screen-sharing-extension-chrome/*.zip
+ignored/**
+web/css
+!web/css/annotation.css
+web/css/vendor/*.css
+
+web/js/components/draggable.js
+web/js/components/htmlElems.js
+web/js/helpers/navigator
+web/js/helpers/OTHelper.js
+web/js/helpers/requests.js
+web/js/helpers/textProcessor.js
+web/js/libs/browser_utils.js
+web/js/libs/ie_polyfills.js
+web/js/vendor/*.js
+web/js/vendor/literallycanvas/*.js
+web/js/vendor/lz-string/*
+
+web/js/smots_lib.js
+web/js/smots_lib.map
+
+web/templates
+
+# Coverage report files
+coverage/**
+
+actualConfig/**
+bck/**

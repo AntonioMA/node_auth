@@ -1,0 +1,12 @@
+{
+    "consumerKey": "YOUR_KEY_GOES_HERE",
+    "consumerSecret": "YOUR_SECRET_GOES_HERE",
+    "includeEmail": true,
+    "authenticateOptions": {
+        "session": false
+    },
+    "strategy" : {
+        "module": "passport-twitter",
+        "object": "Strategy"
+    }
+}

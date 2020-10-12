@@ -1,0 +1,11 @@
+{
+  "clientID": "YOUR_ID_GOES_HERE",
+  "clientSecret": "YOUR_SECRET_GOES_HERE",
+   "authenticateOptions" : {
+      "scope": [ "sdpp-w" ]
+  },
+  "strategy" : {
+      "module": "passport-yahoo-new-oauth2",
+      "object": "OAuth2Strategy"
+  }
+}

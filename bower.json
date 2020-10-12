@@ -1,0 +1,10 @@
+{
+  "name": "ie-wow-room",
+  "dependencies": {
+    "pse-common": "https://github.com/opentok/pse-common.git#0.10.25",
+    "bootstrap-material-datetimepicker": "2.7.1"
+  },
+  "resolutions": {
+    "jquery": ">=2.1.1"
+  }
+}

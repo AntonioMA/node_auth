@@ -1,0 +1,253 @@
+swagger: '2.0'
+info:
+  title: User Info Getter for Delegated Authentication
+  description: |
+    This is a very simple application to get the user information for a logged in user. User will
+    be logged in using any configured method. Delegation uses PassportJS.
+
+  version: 1.0.0
+host: node-auth.herokuapp.com
+schemes:
+  - https
+basePath: /
+consumes:
+  - application/x-www-form-urlencoded
+  - application/json
+produces:
+  - application/json
+  - text/html
+x-implementation-module: node_auth_router.js
+x-implementation-middleware:
+  - configReady
+x-implementation-configuration: loadConfig
+x-multipart-options: getMultipartOptions
+x-static-paths: getStaticPaths
+x-implementation-final-middleware:
+  - errorHandler
+securityDefinitions:
+  tokenAuth:
+    type: apiKey
+    description: >-
+      Authorization based on the UUID/Token of the requesting user.
+      The UUID is generated automatically when the user logs in and
+      has a validity determined by the server.
+    in: header
+    name: x-requester-uuid
+    x-implemented-in: tokenAuth
+  isAdmin:
+    type: apiKey
+    description: >-
+      Allows accessing only if the user is an administrator.
+      Requires the user to have been set previously (so it can't act
+      as a standa alone authorization).
+    in: header
+    name: fake
+    x-implemented-in: userIsAdmin
+  passportAuth:
+    description: >-
+      Multiple auth using passport (supporting multiple providers)
+    in: header
+    name: fake
+    type: apiKey
+    x-implemented-in: passportAuth
+  passportCallback:
+    description: >-
+      Multiple auth using passport (supporting multiple providers)
+    type: apiKey
+    in: header
+    name: fake
+    x-implemented-in: passportCallback
+  ensureLogin:
+    description: >-
+      Ensures the user is logged in or starts the authentication
+      UI flow
+    in: header
+    name: fake
+    type: apiKey
+    x-implemented-in: ensureLogin
+  ltiOAuth:
+    type: oauth2
+    description: >-
+      OAuth1 form parameters authentication as per RFC 5849
+    flow: application
+    tokenUrl: https://server/fake
+    x-implemented-in: oAuthForm
+paths:
+  /user/info:
+    get:
+      summary: Returns a JSON with the authenticated user information.
+      x-implemented-in: getUserInfo
+      description: >-
+        Gets a JSON with the authenticated user information. The user will be authenticated
+        automatically if it's not authenticated already.
+      security:
+        - ensureLogin: []
+      produces:
+         - application/json
+      tags:
+        - User Info
+      responses:
+        '200':
+          description: JSON with the authenticated user information.
+          schema:
+            $ref: '#/definitions/UserInfo'
+        '400':
+          description: Error on the operation
+          schema:
+            $ref: '#/definitions/ErrorInfo'
+  /logout:
+    get:
+      summary: Logs out a logged in user.
+      x-implemented-in: getLogout
+      description: >-
+        Logs out the user and redirects to /
+      tags:
+        - Users
+      produces:
+        - 'text/html'
+      responses:
+        '200':
+          description: Correct result
+          schema:
+            $ref: '#/definitions/HTML'
+  /login/{provider}/callback:
+    get:
+      summary: Callback for the authentication login
+      security:
+        - passportCallback: []
+      x-implemented-in: getLoginCallback
+      description: >-
+        End of the login flow. This URL should not be used directly.
+      parameters:
+        - name: provider
+          description: Id of the provider to use to authenticate the user.
+          in: path
+          required: true
+          type: string
+      tags:
+        - Profile
+        - Private API
+      produces:
+        - 'text/html'
+      responses:
+        '200':
+          description: Correct result
+          schema:
+            $ref: '#/definitions/HTML'
+    post:
+      summary: Callback for the authentication login
+      security:
+        - passportCallback: []
+      x-implemented-in: getLoginCallback
+      consumes:
+        - application/x-www-form-urlencoded
+      description: >-
+        End of the login flow. This URL should not be used directly.
+      parameters:
+        - name: provider
+          description: Id of the provider to use to authenticate the user.
+          in: path
+          required: true
+          type: string
+        - name: fake
+          description: The auth callback data
+          in: formData
+          required: true
+          type: string
+      tags:
+        - Profile
+        - Private API
+      produces:
+        - 'text/html'
+      responses:
+        '200':
+          description: Correct result
+          schema:
+            $ref: '#/definitions/HTML'
+  /login/{provider}:
+    get:
+      security:
+        - passportAuth: []
+      summary: Logs in a user
+      x-implemented-in: getLogin
+      description: >-
+        Starts the login flow. The flow selected depends on the provider and the
+        actual authentication is delegated to an external provider (such as google
+        for example). If the Authentication succeeds then the
+        /login/{provider}/callback URL will be loaded with the information for the
+        login.
+      parameters:
+        - name: provider
+          description: Id of the provider to use to authenticate the user.
+          in: path
+          required: true
+          type: string
+      tags:
+        - Profile
+        - Private API
+      produces:
+        - 'text/html'
+      responses:
+        '200':
+          description: Correct result
+          schema:
+            $ref: '#/definitions/HTML'
+        '403':
+          description: Error authenticating
+          schema:
+            $ref: '#/definitions/ErrorInfo'
+  /authProviders:
+    get:
+      summary: Returns the list of authentication providers configured
+      x-implemented-in: getAuthProviders
+      description: >-
+        Returns the list ids for the authentication providers that have been
+        successfully configured on the server.
+      tags:
+        - Profile
+        - Private API
+      produces:
+        - 'text/html'
+      responses:
+        '200':
+          description: Correct result. List of provider names.
+          schema:
+            type: array
+            items:
+              type: string
+definitions:
+  UserInfo:
+    type: object
+    description: Information available for an authenticated user
+    properties:
+      id:
+        type: string
+        description: ID of the file
+      name:
+        type: string
+        description: Original name of the file
+      webContentLink:
+        type: string
+        description: URL to download the file
+      hasThumbnail:
+        type: boolean
+        description: true if it has a thumbnail
+      thumbnailLink:
+        type: string
+        description: Link to the thumbnail of the file
+      createdTime:
+        type: string
+        description: ISO string of the creation date
+      modifiedTime:
+        type: string
+        description: ISO string of the last modification date
+  ErrorInfo:
+    type: object
+    description: Object returned on errors.
+    properties:
+      code:
+        description: Error code
+        type: integer
+      message:
+        description: Error description
+        type: string

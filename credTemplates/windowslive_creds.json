@@ -1,0 +1,11 @@
+{
+  "clientID": "YOUR_ID_GOES_HERE",
+  "clientSecret": "YOUR_SECRET_GOES_HERE",
+  "authenticateOptions" : {
+      "scope": ["wl.basic", "wl.emails" ]
+  },
+  "strategy" : {
+      "module": "passport-windowslive",
+      "object": "Strategy"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "node-auth",
+  "description": "Sample Application to delegate authentication on external providers",
+  "keywords": [
+    "OpenId Connect",
+    "OAuth",
+    "PassportJS"
+  ],
+  "website": "https://bbva.com/",
+  "repository": "https://github.com/AntonioMA/node_auth.git",
+  "logo": "https://www.bbva.com/wp-content/uploads/2019/04/Logo-BBVA-1920x1080.jpg",
+  "success_url": "/",
+  "env": {
+    "SESSION_SECRET": {
+      "description": "Secret for the session tokens",
+      "value": "you should change this also",
+      "required": "true"
+    }
+  },
+  "addons": [
+    "heroku-redis"
+  ]
+}

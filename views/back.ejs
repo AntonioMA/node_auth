@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  </head>
+
+  <body>
+    <header class="title"></header>
+    <section class="message" data-l10n-id="server-error-request">
+      The server encountered an error and was unable to complete your request
+    </section>
+    <p>
+     <input type=button class="button" onclick="window.history.go(-1);" value="Back">
+    </p>
+
+    <script>
+      'use strict';
+      let error = <%- JSON.stringify(error) %>;
+
+      let l10nReady = document.webL10n && document.webL10n.ready;
+      document.querySelector('.title').innerHTML = messages[error] || (error.name && messages[error.name]) || error.message;
+      document.querySelector('.button').value = document.webL10n.get('button-back');
+    </script>
+  </body>
+
+</html>
+

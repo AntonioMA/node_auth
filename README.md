@@ -13,23 +13,25 @@ You'll need:
   installations (recommended), you can run `nvm use` in the project directory to
   select the right version.
 - Redis: http://redis.io.
-- Bower: http://bower.io
-- Grunt: http://gruntjs.com (only if you intend to develop or run the tests)
 
 #### Installation:
 
 TBD
 
 1. You'll need to create and configure a [Google Drive Service Account and Service account key](#google-drive-service-account)
+2. Or to create an Hydra client. Assuming you have Hydra running on hydra.public.viam.dev.local:4444
+   (which can/should point to localhost) and that you have a nice script to create clients:
+```
+  ./addClient.sh node_client "http://localhost:8123/login/hydra/callback,http://127.0.0.1:8123/login/hydra/callback"
+```
+The script will return you the secret.
+
 3. You'll need to create and configure at least one [authentication provider account](#authenticator-accounts)
 
 After all the prerequisites are ready, execute
 
 ```
-
 npm install
-bower install
-grunt
 ```
 
 
@@ -52,7 +54,7 @@ node server
 Open in browser
 
 ```
-http://localhost:8123
+http://localhost:8123/login/hydra
 ```
 
 The server can be provided several options. Those are:
@@ -100,6 +102,25 @@ You will need to get and define some developer accounts: One for each of the aut
 
 
 ### Authenticator Accounts
+#### Hydra (running locally)
+0. Add `127.0.0.1 hydra.public.viam.dev.local` to your /etc/hosts file.
+1. Create a client id:
+```
+  ./addClient.sh node_client "http://localhost:8123/login/hydra/callback,http://127.0.0.1:8123/login/hydra/callback"
+```
+  and take note of the secret returned.
+2. Modify the file credTemplates/oidc_creds.json to set the secret you got on the previous step.
+3. Execute:
+```
+node addJSONKey.js -f credTemplates/oidc_creds.json -k nodeAuth/Authenticator/hydra
+```
+where NAME_OF_THE_SAVED_FILE is the name of the file you created on step 5
+4. Add hydra to the nodeAuth/Params/authenticator_providers redis key:
+```
+redis-cli set nodeAuth/Params/authenticator_providers hydra
+```
+
+
 #### Twitter Sign In
  1. Create an application associated to the your twitter account on https://apps.twitter.com/.
  2. On the application details, you *must* specify a privacy and terms of service URL

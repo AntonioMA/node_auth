@@ -1,0 +1,16 @@
+{
+  "issuer": "http://hydra.public.viam.dev.local:4444",
+  "authorizationURL": "http://hydra.public.viam.dev.local:4444/oauth2/auth",
+  "tokenURL":  "http://hydra.public.viam.dev.local:4444/oauth2/token",
+  "userInfoURL": "http://hydra.public.viam.dev.local:4444/userinfo",
+  "clientID": "node_client",
+  "clientSecret": "d50a804591e29858ae9e6522cc8048bedcb9d88",
+  "callbackURL": "http://localhost:8123/login/hydra/callback",
+  "authenticateOptions" : {
+    "scope": [ "email" ]
+  },
+  "strategy" : {
+    "module": "passport-openidconnect",
+    "object": "Strategy"
+  }
+}

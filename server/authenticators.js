@@ -89,6 +89,11 @@ function Authenticators(callbackBaseURL, persistConfig, DB, aLogLevel) {
       getUUIDForProfile(prv, prof).
       then(aUserInfo => done(!aUserInfo && 'UNKNOWN_USER', aUserInfo));
 
+  const ISS_PROF_ST_CB = (prv, issuer, prof, done) => {
+    logger.trace('ISS_PROF_ST_CB: ', [prv, issuer, prof]);
+    return STRATEGY_CB(prv, null, null, prof, done);
+  }
+
   const REQ_DONE_ST_CB = (prv, req, done) => {
     logger.trace('REQ_DONE_ST_CB:', req.body);
     if (!req.body || !req.body.name) {
@@ -110,6 +115,7 @@ function Authenticators(callbackBaseURL, persistConfig, DB, aLogLevel) {
   const STRATEGIES_CB = {
     'req,done': REQ_DONE_ST_CB,
     'acTok,refTok,prof,done': STRATEGY_CB,
+    'iss,prof,done': ISS_PROF_ST_CB,
     default: STRATEGY_CB,
   };
 

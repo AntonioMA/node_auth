@@ -56,7 +56,7 @@ function Login(aLogLevel, aModules) {
     if (!aReq.user) {
       logger.trace('ensureLogin. Not authenticated. Setting return URL to:', aReq.originalUrl);
       aReq.session = Object.assign(aReq.session || {}, { returnTo: aReq.originalUrl });
-      return aRes.redirect('/login/google');
+      return aRes.redirect('/login/hydra');
     }
     return aNext();
   }

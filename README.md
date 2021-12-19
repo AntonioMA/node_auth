@@ -22,9 +22,10 @@ TBD
 2. Or to create an Hydra client. Assuming you have Hydra running on hydra.public.viam.dev.local:4444
    (which can/should point to localhost) and that you have a nice script to create clients:
 ```
-  ./addClient.sh node_client "http://localhost:8123/login/hydra/callback,http://127.0.0.1:8123/login/hydra/callback"
+  ./addClient.sh node_client "http://localhost:8123/login/hydra/callback,http://127.0.0.1:8123/login/hydra/callback" client_secret_post
 ```
-The script will return you the secret.
+The script will return you the secret. Note that for the script to work you have to have the hydra
+executable on the same directory than the addClient.sh script.
 
 3. You'll need to create and configure at least one [authentication provider account](#authenticator-accounts)
 

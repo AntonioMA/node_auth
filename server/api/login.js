@@ -50,13 +50,14 @@ function Login(aLogLevel, aModules) {
 
   }
 
-  // For the time being, use google always as an auth provider
+  // For the time being, use hydra as a default auth provider, if the authProvider query is not
+  // set-
   function ensureLogin(aPath, aReq, aRes, aNext) {
     aReq.user = aReq.user || (aReq.session && aReq.session.user);
     if (!aReq.user) {
       logger.trace('ensureLogin. Not authenticated. Setting return URL to:', aReq.originalUrl);
       aReq.session = Object.assign(aReq.session || {}, { returnTo: aReq.originalUrl });
-      return aRes.redirect('/login/hydra');
+      return aRes.redirect('/login/' + (aReq.query.authProvider || 'hydra'));
     }
     return aNext();
   }

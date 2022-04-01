@@ -209,7 +209,7 @@ where NAME_OF_THE_SAVED_FILE is the name of the file you created on step 7
 #### Microsoft accounts (aka Windows live) Sign In
  1. Register an application with Microsoft at Live connect app management:
  https://apps.dev.microsoft.com
-    * Set the name of the app "ZeroSpace MVP"
+    * Set the name of the app "Your Azure App"
     * Generate a secret (save it, it will be necessary later for replacing YOUR_SECRET_GOES_HERE)
     * Add web plattform, as redirect URL add: https://<yourServerBaseURL>/login/windowslive/callback
     where <yourServerBaseURL> is the origin for your instance and press Create

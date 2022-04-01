@@ -16,18 +16,7 @@ You'll need:
 
 #### Installation:
 
-TBD
-
-1. You'll need to create and configure a [Google Drive Service Account and Service account key](#google-drive-service-account)
-2. Or to create an Hydra client. Assuming you have Hydra running on hydra.public.viam.dev.local:4444
-   (which can/should point to localhost) and that you have a nice script to create clients:
-```
-  ./addClient.sh node_client "http://localhost:8123/login/hydra/callback,http://127.0.0.1:8123/login/hydra/callback" client_secret_post
-```
-The script will return you the secret. Note that for the script to work you have to have the hydra
-executable on the same directory than the addClient.sh script.
-
-3. You'll need to create and configure at least one [authentication provider account](#authenticator-accounts)
+You'll need to create and configure at least one [authentication provider account](#authenticator-accounts)
 
 After all the prerequisites are ready, execute
 
@@ -35,10 +24,9 @@ After all the prerequisites are ready, execute
 npm install
 ```
 
-
 #### Run local server:
 
-Note: The server and some of the providers (Twitter for example) needs to keep a session to manage
+Note: The server and some of the providers (Twitter and Hydra for example) needs to keep a session to manage
 redirects when authenticating. The session is very transient. It requires the environment variable
 SESSION_SECRET to be set to any (secret) value:
 
@@ -50,6 +38,11 @@ Execute
 
 ```
 node server
+```
+or
+```
+  export SESSION_SECRET="some very secret value goes here"
+  node server
 ```
 
 Open in browser
@@ -66,7 +59,7 @@ Usage: node server
   -h, --help                    Displays this help.
   -d, --daemon                  Starts as a daemon.
   -l, --logFile=ARG             Logs output to this file, only if started as a daemon.
-  -L, --logLevel=ARG            Desired log level, expressed as a string such as "warn,error"
+  -L, --logLevel=ARG            Desired log level, expressed as a string such as "warn,error". If you want all logs, `--logLevel=all`
   -p, --serverPort=ARG          Server listening port. If not present it uses either the PORT env variable or the 8123 port
   -s, --staticPath=ARG          Directory that holds the static files.
   -C, --certDir=ARG             Directory that holds the cert.pem and key.pem files.
@@ -104,8 +97,8 @@ You will need to get and define some developer accounts: One for each of the aut
 
 ### Authenticator Accounts
 #### Hydra (running locally)
-0. Add `127.0.0.1 hydra.public.viam.dev.local` to your /etc/hosts file.
-1. Create a client id:
+1. Add `127.0.0.1 hydra.public.viam.dev.local` to your /etc/hosts file.
+2. Create a client id:
 ```
   ./addClient.sh node_client "http://localhost:8123/login/hydra/callback,http://127.0.0.1:8123/login/hydra/callback"
 ```
@@ -115,13 +108,13 @@ You will need to get and define some developer accounts: One for each of the aut
 ```
 node addJSONKey.js -f credTemplates/oidc_creds.json -k nodeAuth/Authenticator/hydra
 ```
-where NAME_OF_THE_SAVED_FILE is the name of the file you created on step 5
 4. Add hydra to the nodeAuth/Params/authenticator_providers redis key:
 ```
 redis-cli set nodeAuth/Params/authenticator_providers hydra
 ```
-
-
+5. At this point you can run the server (the previous steps have to be done only *once*):
+```
+```
 #### Twitter Sign In
  1. Create an application associated to the your twitter account on https://apps.twitter.com/.
  2. On the application details, you *must* specify a privacy and terms of service URL

@@ -112,9 +112,6 @@ node addJSONKey.js -f credTemplates/oidc_creds.json -k nodeAuth/Authenticator/hy
 ```
 redis-cli set nodeAuth/Params/authenticator_providers hydra
 ```
-5. At this point you can run the server (the previous steps have to be done only *once*):
-```
-```
 #### Twitter Sign In
  1. Create an application associated to the your twitter account on https://apps.twitter.com/.
  2. On the application details, you *must* specify a privacy and terms of service URL
